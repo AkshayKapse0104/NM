@@ -1,0 +1,181 @@
+clc
+clear all
+fprintf("\nProgram for Double Integration ");
+fprintf("\n Name. Akshay Sudhakr Kapse Roll No.57");
+f = @(x, y) (x+y);
+x0 = input('\nEnter the value of x0 = ');
+xn = input('Enter the value of xn = ');
+N = input('Enter the value of N = ');
+y1 = input('Enter the value of y1 = ');
+ym = input('Enter the value of ym = ');
+M = input('Enter the value of M = ');
+h = (xn - x0) / N;
+k = (ym - y1) / M;
+for i = 1:(M+1)
+x1 = x0;
+for j = 1:(N+1)
+a(i, j) = f(x1, y1);
+x1 = x1 + h;
+end
+y1 = y1 + k;
+end
+for j = 1:(N+1)
+s(j) = 0;
+for i = 1:M
+s(j) = s(j) + (a(i, j) + a(i+1, j));
+end
+end
+area = 0;
+for i = 1:N
+area = area + (s(i) + s(i+1));
+end
+Total_area = area * (h * k / 4);
+fprintf('\nTOTAL AREA = %f', Total_area);
+
+%Program for Laplace Equation
+clc
+clear all
+fprintf("\nProgram for Laplace Equation ");
+fprintf("\n Name. Akshay Sudhakr Kapse Roll No.57");
+n=input('\nEnter total no of rows and columns');
+for i=1:n
+ for j=1:n
+ a(i,j)=input('\nEnter the Elements of aij=');
+ end
+end
+fprintf('\nMatrix in original format is\n');
+for i=1:n
+ for j=1:n
+ fprintf('%8.2f',a(i,j));
+ end
+ fprintf('\n');
+end
+for k=1:10
+ for i=2:(n-1)
+ for j=2:(n-1)
+ a(i,j)=(a(i+1,j)+a(i-1,j)+a(i,j+1)+a(i,j-1))/4;
+ end
+ end
+end
+fprintf('\nFinal Matrix is\n');
+for i=1:n
+ for j=1:n
+ fprintf('%8.2f',a(i,j));
+ end
+ fprintf('\n');
+end
+fprintf('\nSolution of the Problem is as follows:');
+for i=2:(n-1)
+ for j=2:(n-1)
+ fprintf('\nT(%d %d)=%8.2f',i,j,a(i,j));
+ end
+end
+
+clc
+clear all
+fprintf("\n Program on Forward Interpolation Method");
+fprintf("\n Name. Akshay Sudhakr Kapse Roll No.57");
+n=input('\nenter total no. of points n=');
+xr=input('enter value of xr=');
+for i=1:n
+    x(i)=input('enter values of x=');
+    y(i)=input('enter values of y=');
+end
+h=x(2)-x(1);
+u=(xr-x(1))/h;
+value=y(1);
+for j=1:(n-1)
+    for i=1:(n-j)
+        if (j==1)
+            d(i,j)=y(i+1)-y(i);
+        else
+        d(i,j)=d((i+1),(j-1))-d(i,(j-1));
+        end
+    end
+end
+for i=1:(n-1)
+    prod=d(1,i);
+    for j=1:i
+        prod=prod*(u-(j-1))/j;
+    end
+    value=value+prod;
+    
+end
+for i=1:(n-1)
+    for j=1:(n-i)
+        fprintf('%8.2f',d(i,j));
+    end
+    fprintf('\n');
+end
+fprintf('Ans by program is =%f',value)
+%Solver
+solver=interp1(x,y,xr,'spline')
+fprintf('\nBy Program\tBy solver');
+fprintf('\n%8.4f\t%8.4f',value,solver);
+
+%gauss sedial with partial pivoting
+fprintf('\n Akshay Sudhakar Kapse Roll No.57 ');
+fprintf('\n Program of gauss Seidal Method');
+n = input('\nEnter the total no. of equations n = ');
+n1 = input('\nEnter the no. of iterations n1 = ');
+
+x = zeros(n, 1);
+
+% Read input
+for i = 1:n
+    for j = 1:n
+        a(i,j) = input('\nEnter the value of a = ');
+        c(i,j)=a(i,j);
+    end
+    b(i) = input('\nEnter the value of b = ');
+    d(i)=b(i);
+end
+
+fprintf('\nMatrix in original format is:\n');
+for i = 1:n
+    for j = 1:n
+        fprintf('%8.2f', a(i,j));
+    end
+    fprintf('%8.2f', b(i));
+    fprintf('\n');
+end
+
+% Partial pivoting
+for k = 1:n
+    m = k;
+    max = a(k,k);
+    for i = (k+1):n
+        if (max < abs(a(i,k)))
+            max = abs(a(i,k));
+            m = i;
+        end
+    end
+    for j = 1:n
+        prod = a(k,j);
+        a(k,j) = a(m,j);
+        a(m,j) = prod;
+    end
+    pmp = b(m);
+    b(m) = b(k);
+    b(k) = pmp;
+end
+
+fprintf('\nMatrix in partially pivoted format is:\n');
+for i = 1:n
+    for j = 1:n
+        fprintf('%8.2f', a(i,j));
+    end
+    fprintf('%8.2f', b(i));
+    fprintf('\n');
+end
+
+% Gaussian seidal method
+for i = 1:n1
+    for j = 1:n
+        x(j) = (1/a(j,j)) * (b(j) - a(j,1:j-1)*x(1:j-1) - a(j,j+1:n)*x(j+1:n));
+    end
+    fprintf('\nSolution after %d iteration(s):\n', i);
+    for j = 1:n
+        fprintf('%8.4f\n', x(j));
+    end
+end
