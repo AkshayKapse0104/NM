@@ -1,0 +1,52 @@
+fprintf('\n program for bisection') ;
+f=@(x) (x*x*x-x*x-x-1); 
+x1=input('\n enter the value of x1=') ;
+x2=input('\n enter the value of x2=') ;
+acc=input ('\n enter the value of acc=') ;
+while(f(x1)*f(x2) > 0) 
+    x1=input ('\n reenter x1=') ;
+    x2 = input('\n reenter x2=');
+end
+xroot = (x1+x2)/2;
+xrootold = 0;
+a=1;
+z=0;
+fprintf('Iter x1 f(x1) x2 f(x2) xroot f(xroot) a\n') ;
+while(abs(a) >acc) 
+    if(f(x1) *f(xroot) < 0) 
+        x2=xroot; 
+        
+    else
+        x1=xroot; 
+    end
+    xrootold = xroot; 
+    xroot = (x1+x2) /2;
+    a=(xroot-xrootold)/xroot; 
+    z=z+1;
+    fprintf('\n%0.4f %0.4f %0.4f %0.4f %0.4f %0.4f %0.4f', z, x1, f(x1), x2, f(x2), xroot, f(xroot), a) ;
+end
+%output
+fprintf('\n roots of given equation is%f', xroot);
+
+
+
+
+f=@(x) (x^3-5*x+3);
+f1=@(x) (3*x^2-5);
+f2=@(x) (6*x);
+acc=input('\n enter the value of acc=');
+x1=input('\n enter the value of x1=');
+while (f(x1)-f2(x1)/(f1(x1)^2)>0)
+    x1=input('\n reenter the value of x1=');
+end
+xroot=((x1)-f(x1)/f1(x1));
+xrootold=0;
+a=1;
+z=1;
+while (abs(a)>acc)
+    x1=xroot;
+    xrootold=xroot;
+    xroot=((x1)-f(x1)/f1(x1));
+    a=(xroot-xrootold)/xroot;
+end
+fprintf('\n Root=%f',xroot);
